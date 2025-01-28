@@ -8,6 +8,7 @@ interface ListTableProps {
   showModal: (record?: DataType) => void;
 }
 
+
 const ListTable: React.FC<ListTableProps> = ({ dataSource, handleDelete, showModal }) => {
   const columns = [
     {

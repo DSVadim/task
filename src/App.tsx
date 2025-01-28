@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import { Button } from "antd";
 import ListTable from "./components/ListTable";
 import ListModal from "./components/ListModul";
+import ListForm from "./components/ListForm"
 import { DataType } from "./components/interface/DataType";
 
 const App: React.FC = () => {
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-  const [editRecord, setEditRecord] = useState<{ 
-    firstName: string;
-     lastName: string; 
-     age: string; 
-     key?: string} | null>(null);
+  const [editRecord, setEditRecord] = useState<{ firstName: string; lastName: string; age: string; key?: string | number } | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = (record?: DataType) => {

@@ -14,9 +14,9 @@ interface ListModalProps {
   handleCancel: () => void;
 }
 
+
 const ListModal: React.FC<ListModalProps> = ({
   isModalVisible,
-  setIsModalVisible,
   firstName,
   setFirstName,
   lastName,
