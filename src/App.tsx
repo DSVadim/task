@@ -2,59 +2,55 @@ import React, { useState } from "react";
 import { Button } from "antd";
 import ListTable from "./components/ListTable";
 import ListModal from "./components/ListModul";
-import { DataType } from "./components/interface/DataType";  
-
+import { DataType } from "./components/interface/DataType";
 
 const App: React.FC = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [age, setAge] = useState("");
   const [dataSource, setDataSource] = useState<DataType[]>([]);
-  const [editRecord, setEditRecord] = useState<DataType | null>(null);
+  const [editRecord, setEditRecord] = useState<{ 
+    firstName: string;
+     lastName: string; 
+     age: string; 
+     key?: string} | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = (record?: DataType) => {
     if (record) {
-      setFirstName(record.firstName);
-      setLastName(record.lastName);
-      setAge(record.age);
-      setEditRecord(record);
+      setEditRecord({
+        firstName: record.firstName,
+        lastName: record.lastName,
+        age: record.age,
+        key: record.key,
+      });
     } else {
-      setFirstName("");
-      setLastName("");
-      setAge("");
-      setEditRecord(null);
+      setEditRecord({ firstName: "", lastName: "", age: "" });
     }
     setIsModalVisible(true);
   };
 
   const handleAddOrEdit = () => {
-    if (editRecord) {
+    if (!editRecord) return;
+
+    if (editRecord.key) {
       const newData = dataSource.map((item) =>
         item.key === editRecord.key
-          ? { ...item, firstName, lastName, age }
+          ? { ...item, firstName: editRecord.firstName, lastName: editRecord.lastName, age: editRecord.age }
           : item
       );
       setDataSource(newData);
     } else {
       const newData: DataType = {
         key: `${dataSource.length + 1}`,
-        firstName,
-        lastName,
-        age,
+        firstName: editRecord.firstName,
+        lastName: editRecord.lastName,
+        age: editRecord.age,
       };
       setDataSource([...dataSource, newData]);
     }
-    setLastName("");
-    setAge("");
-    setIsModalVisible(false);
 
-    setFirstName("");
-    setLastName("");
-    setAge("");
-    setIsModalVisible(false);
     setEditRecord(null);
+    setIsModalVisible(false);
   };
+
   const handleDelete = (key: React.Key) => {
     const newData = dataSource.filter((item) => item.key !== key);
     setDataSource(newData);
@@ -64,22 +60,11 @@ const App: React.FC = () => {
     setIsModalVisible(false);
     setEditRecord(null);
   };
-  >
-  Add User
-</Button>
-<ListTable
-  dataSource={dataSource}
-  handleDelete={handleDelete}
-  showModal={showModal}
-/>
-<ListModal
-  isModalVisible={isModalVisible}
-  setIsModalVisible={setIsModalVisible}
 
   return (
     <div>
       <Button
-        onClick={() => showModal()} 
+        onClick={() => showModal()}
         type="primary"
         style={{ marginBottom: 16 }}
       >
@@ -93,12 +78,12 @@ const App: React.FC = () => {
       <ListModal
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
-        firstName={firstName}
-        setFirstName={setFirstName}
-        lastName={lastName}
-        setLastName={setLastName}
-        age={age}
-        setAge={setAge}
+        firstName={editRecord?.firstName || ""}
+        setFirstName
+        lastName={editRecord?.lastName || ""}
+        setLastName
+        age={editRecord?.age || ""}
+        setAge
         handleAddOrEdit={handleAddOrEdit}
         handleCancel={handleCancel}
       />
